@@ -1,4 +1,4 @@
-=== WooCommerce Product PDF & Print ===
+=== WooCommerce PDF & Print ===
 Contributors: gVectors Team
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VNMGTCF9NRH5C
 Tags: WooCommerce, WooCommerce Product, WooCommerce Product PDF, PDF, Save as PDF, Save Product as PDF, PDF Button, WooCommerce Product Word Document, Word Document, Doc, Save as Doc, Save as Word Document, Save Product as Doc, Doc Button, Word Document Button, Print, Product Print, WooCommerce Print, Print Button
