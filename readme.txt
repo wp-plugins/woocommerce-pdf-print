@@ -19,6 +19,7 @@ Adds PDF, Doc and Print buttons on WooCommerce Product Page. Allows print and sa
 * Custom location using `<?php wpp_save() ?>` template tag
 
 **Product Print Options**
+
 * Print Product Details,
 * Print Template settings 
 * Custom location using `<?php wpp_print() ?>` template tag
