@@ -235,6 +235,20 @@ function _parsepng($file)
 {
 	//Extract info from a PNG file
 	$f=fopen($file,'rb');
+	
+	if(!$f){
+	    $makeitlocal =  trim(get_option( 'siteurl' ), '/') . '/';
+	    $file = str_replace($makeitlocal, '', $file);
+		$f=fopen($file,'rb');
+		if( !$f && strpos($file, 'http') !== FALSE ){
+			$this->Error('[Error] Please turn on "allow_url_fopen" on your server to allow insert images in PDF Document, more info here: http://stackoverflow.com/questions/3694240/add-allow-url-fopen-to-my-php-ini-using-htaccess');
+		}
+		if(!$f){
+			$f=fopen( './'.$file,'rb');
+		}
+	}
+
+	
 	if(!$f)
 		$this->Error('Can\'t open image file: '.$file);
 	//Check signature
