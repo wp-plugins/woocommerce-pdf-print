@@ -258,6 +258,7 @@ function wpp_text_filter( $wpp_body ){
 	$wpp_body = wpp_linkifyYouTubeURLs($wpp_body );
 	$wpp_body = str_replace( "’" , "'", $wpp_body );
 	$wpp_body =  do_shortcode( $wpp_body );
+	$wpp_body = apply_filters('the_content', $wpp_body);
 	$xsearch = array ( "'<script[^>]*?>.*?</script>'si", "'<style[^>]*?>.*?</style>'si",  "'<head[^>]*?>.*?</head>'si", "'<link[^>]*?>.*?</link>'si", "'<link[^>]*?>'si", "'<object[^>]*?>.*?</object>'si"); 
 	$xreplace = array ( "", "", "", "", "", "");                 
 	$wpp_body = preg_replace($xsearch, $xreplace, $wpp_body);
@@ -267,6 +268,7 @@ function wpp_text_filter( $wpp_body ){
 function wpp_export( $export ) {
 	
 	error_reporting(0);
+	ob_clean();
 	$export = addslashes(substr(strip_tags($_GET[ 'wpp_export' ]), 0, 5));
 	@set_time_limit (864000);
 	if(ini_get('max_execution_time')!=864000)@ini_set('max_execution_time',864000);
@@ -277,7 +279,6 @@ function wpp_export( $export ) {
 	if( post_password_required($post->ID)) return false;
 	$product = get_product( $post->ID );
 	$out = '';
-	//$wpp_featured_image = get_the_post_thumbnail( $post->ID, 'shop_single' ); // Some plugins affect this output
 	if ( function_exists('has_post_thumbnail') && has_post_thumbnail($post->ID) ) { $thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'shop_single' ); $wpp_featured_image = ($thumbnail[0]) ? $thumbnail[0] : $thumbnail[0]; } else{ $wpp_featured_image = ''; }
 	if( $thumbnail[1] ) $wpp_featured_image = '<img width="'.$thumbnail[1].'" height="'.$thumbnail[2].'" src="'.$thumbnail[0].'"/>';
 	
@@ -301,7 +302,17 @@ function wpp_export( $export ) {
 		$wpp_attributes = $product->get_attributes(); 
 		if(!empty($wpp_attributes)){
 			foreach( $wpp_attributes as $attribute){
-				$attribute_html .= '<li>'.$attribute['name'].': '.$attribute['value']."\r\n</li>";
+				if( $attribute['is_taxonomy'] ){
+					$product_terms = wp_get_post_terms( $post->ID, $attribute['name'] ); $p_terms = array();
+					$attribute_name = ucwords(str_replace('attribute_','',str_replace('pa_','',$attribute['name'])));
+					foreach($product_terms as $p_term){
+						$p_terms[] = $p_term->name;
+					}
+					$attribute_html .= '<li>'.$attribute_name.': '.implode(', ', $p_terms)."\r\n</li>";
+				}
+				else{
+					$attribute_html .= '<li>'.$attribute['name'].': '.$attribute['value']."\r\n</li>";
+				}
 			}
 		}
 	}
@@ -322,18 +333,33 @@ function wpp_export( $export ) {
 		$wpp_variants = str_replace(array('<li>  -  ',',   -  '), array('<li>','  -  '), $wpp_variants);
 	}
 	
+	if( $product_meta = get_post_meta( $post->ID ) ){
+		foreach( $product_meta as $meta_key => $meta_value ){
+			if( strpos($meta_key, '_wpt_field_') !== FALSE ){
+				$custom_tab_slug = str_replace('_wpt_field_', '', $meta_key);
+				$custom_tab = get_posts(array( 'name' => $custom_tab_slug, 'posts_per_page' => 1, 'post_type' => 'woo_product_tab', 'post_status' => 'publish' ));
+				if(strip_tags(trim($meta_value[0]))){
+					$custom_tab_title_html[] = $custom_tab[0]->post_title;
+					$custom_tab_content_html[] = wpp_text_filter($meta_value[0]);
+				}
+			}
+			continue;
+		}
+	}
+	
+	
 	$wpp_gallery = $product->get_gallery_attachment_ids();
 	foreach( $wpp_gallery as $wpp_img ){
 		$wpp_gallery_images .= '&nbsp;'.wp_get_attachment_image( $wpp_img, 'shop_single' ) . '&nbsp;';
 	}
 	
+	
+	
 	if( $export == 'doc' ) {
 		
 		$doc_title = stripslashes( $post->post_title );
 		$wpp_description = stripslashes( $wpp_description );
-		
 		$wpp_price = 'Price: ' . html_entity_decode(str_replace( '&ndash;', ' - ', $product->get_price_html()), ENT_QUOTES, "UTF-8");
-		
 		if( get_option('wpp_save_doc_img_max_width') ){ $wpp_max_image_width = get_option('wpp_save_doc_img_max_width'); } else{ $wpp_max_image_width = 500; }
 		if( preg_match_all('|width=[\'\"]*(\d+)[\'\"]*[^\>\<]+height=[\'\"]*(\d+)[\'\"]*|i', $wpp_description, $doc_img_sizes, PREG_SET_ORDER ) ){ foreach( $doc_img_sizes as $doc_img ){ $doc_img_w = $doc_img[1]; $doc_img_h = $doc_img[2]; if( (int)$wpp_max_image_width < (int)$doc_img_w ){ $doc_img_h = $doc_img_h * ( $wpp_max_image_width / $doc_img_w ); $doc_img_w = $wpp_max_image_width; } $wpp_description = preg_replace('|width=[\'\"]*'.$doc_img[1].'[\'\"]*[^\>\<]+height=[\'\"]*'.$doc_img[2].'[\'\"]*|i', 'width="'.$doc_img_w.'" height="'.$doc_img_h.'"', $wpp_description );}}
 		$wpp_description = preg_replace('|\[caption[^\]]+\]([^\]]*)\[\/caption\]|is', '$1', $wpp_description);
@@ -347,8 +373,6 @@ function wpp_export( $export ) {
 		}
 		$wpp_doc_urls = wpp_img_url( $wpp_description );
 		if(!empty($wpp_doc_urls)){ foreach( $wpp_doc_urls as $k => $v ){ $wpp_description = str_replace( $k, $v, $wpp_description ); }}
-		$wpp_description = preg_replace( "|\r|", "</p> <p>" , $wpp_description);
-		
 		$doc_post_date = $post->post_date;
     	$doc_post_date_gmt = $post->post_date_gmt;
 		$doc_modified_date = $post->post_modified;
@@ -360,12 +384,10 @@ function wpp_export( $export ) {
 		Post modified date GMT: '.$doc_modified_date_gmt:'');
 		if( get_option('wpp_save_doc_template') ){
 			require( WPP_FOLDER . 'template/save_as_word_document.php' );
-			
 		}
 		else{
 			require( WPP_FOLDER . 'template/save_as_word_document_oo.php' );
 		}
-		
 		$doc = trim($doc);
 		$length = strlen( $doc );
 		$file = trim( str_replace( ' ', '-' , trim($doc_title) ), '-' );
@@ -385,12 +407,10 @@ function wpp_export( $export ) {
 		global $wpp_html_link;
 		$html_title = stripslashes( $post->post_title );
 		$wpp_html_link = stripslashes( $post->guid );
-		
 		//Price Style
 		if( $product->is_on_sale() ){ $wpp_price = html_entity_decode(str_replace(array('<del>', '</del>'), array('^[font][Real Price: ', '][200,200,200][12]^<br>
  ^[font][Current Sale Price:'), str_replace( '&ndash;', ' - ', $product->get_price_html())), ENT_QUOTES, "UTF-8").'][15, 117, 84][12]^';
 		} else{ $wpp_price = '^[font][Price: ' . html_entity_decode( strip_tags( $product->get_price_html()), ENT_QUOTES, "UTF-8").'][15, 117, 84][12]^'; }
-		
 		//Limiting image sizes
 		preg_match_all('|<img[^>]+(class[\s\n\t\r]*=[\s\n\t\r]*[\'\"]+[^\'\">]+[\'\"]+)[^>]*>|i', $html_body, $body_array, PREG_SET_ORDER);
 		if( !empty($body_array) ) {
@@ -402,7 +422,6 @@ function wpp_export( $export ) {
 		$html_body = preg_replace('|<noscript>.+?</noscript>|is', '', $html_body);
 		$html_body = preg_replace( "|\r|", "<br>" , $html_body);
 		$wpp_pdf_urls = wpp_img_url( $html_body );
-		
 		if(!empty($wpp_pdf_urls)){
 			foreach( $wpp_pdf_urls as $k => $v ){
 				if( strpos( $k, '../' ) === FALSE ){
@@ -413,18 +432,14 @@ function wpp_export( $export ) {
 				}
 			}
 		}
-		
 		require( WPP_FOLDER . 'template/save_as_pdf.php' );
 		require( WPP_FOLDER . 'pdf.php' );
-	
 	}
 	elseif( $export == 'print' ) {
 	
 		$print_title = stripslashes( $post->post_title );
 		$wpp_description = stripslashes( $wpp_description );
-		
 		$wpp_price = 'Price: ' . html_entity_decode(str_replace( '&ndash;', ' - ', $product->get_price_html()), ENT_QUOTES, "UTF-8");
-		
 		if( get_option('wpp_save_print_img_max_width') ){ $wpp_max_image_width = get_option('wpp_save_print_img_max_width'); } else{ $wpp_max_image_width = 500; }
 		if( preg_match_all('|width=[\'\"]*(\d+)[\'\"]*[^\>\<]+height=[\'\"]*(\d+)[\'\"]*|i', $wpp_description, $print_img_sizes, PREG_SET_ORDER ) ){
 			foreach( $print_img_sizes as $print_img ){
@@ -451,44 +466,34 @@ function wpp_export( $export ) {
 				$wpp_description = str_replace( $body_array[$i][0], $replace , $wpp_description);
 			}
 		}
-		$wpp_description = preg_replace( "|\r|", "<br>" , $wpp_description);
 		$print_excerpt = stripslashes( $post->post_excerpt );
 		$print_post_date = $post->post_date;
     	$print_post_date_gmt = $post->post_date_gmt;
 		$print_modified_date = $post->post_modified;
 		$print_modified_date_gmt = $post->post_modified_gmt;
-		
 		if(!get_option('wpp_pt_image')){
 			 $wpp_description = preg_replace( '|<img[^><]+>|i','', $wpp_description );
 		}
-		
 		$pt_header = (get_option('wpp_pt_head_site'))? '<a href="'.get_option('siteurl').'" target="_blank" class="wpp_header_2">'.get_option('blogname').'</a> <br/>': '';
 		$pt_header .= (get_option('wpp_pt_head_url'))? '<a href="'.get_permalink($post->ID).'" target="_blank" class="wpp_header_3">'.get_permalink($post->ID).'</a> <br />': '';
 		$pt_header .= (get_option('wpp_pt_head_date'))? 'Export date: '. date("D M j G:i:s Y / O ") .' GMT<br />': '';
 		$pt_header .= '<hr />';
-		
 		$pt_title = 
 		(($print_title && get_option('wpp_pt_title'))? '<h2 style="text-align:'.get_option('wpp_save_text_align').'">'.$print_title.'</h2><br>' :'');
-		
 		$pt_excerpt = 
 		(($print_excerpt && get_option('wpp_pt_excerpt'))?'<strong>Excerpt:</strong> '.$print_excerpt:'');
-		
 		$pt_links = 
 		(($print_links && get_option('wpp_pt_links'))?'<strong>Links:</strong> <ol type="1">'.$print_links.'</ol>':'');
-		
 		$pt_date = 
 		((get_option('wpp_pt_date'))?'Post date: '.$print_post_date.'<br>Post date GMT: '.$print_post_date_gmt.'<br><br>':'');
-		
 		$pt_md_date = 
 		((get_option('wpp_pt_md'))?'Post modified date: '.$print_modified_date.'<br>
 		Post modified date GMT: '.$print_modified_date_gmt:'');
-		
 		$pt_footer = ((get_option('wpp_pt_header'))?'<br>Export date: '. date("D M j G:i:s Y / O ") .' GMT
 		<br> This page was exported from '.get_option('blogname').' 
 		[ <a href="'.(str_replace( array('&wpp_export=print','?wpp_export=print'), '', $_SERVER['REQUEST_URI'] )).'" target="_blank">'.get_option('siteurl').'</a> ]<hr/>
 		Export of Post and Page has been powered by [ WooCommerce PDF &amp; Print ] plugin by 
 		<a href="http://www.gVectors.com" target="_blank">www.gVectors.com</a>':'');
-		
 		require( WPP_FOLDER . 'template/print.php' );
 		echo $print; 
 	}

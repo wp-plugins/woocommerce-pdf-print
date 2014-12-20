@@ -54,7 +54,8 @@ img{
 	' : "\r\n" ).''.(($wpp_summary) ? "<h2 style=\"color:#333333\">Product Summary</h2><p>".$wpp_summary.'</p>
 	' : '' ).''.(($wpp_description) ? "<h2 style=\"color:#333333\">Product Description</h2><p>".$wpp_description.'</p>
 	' : '' ).''.((trim(strip_tags($attribute_html))) ? "<h2 style=\"color:#333333\">Product Attributes</h2><p>".$attribute_html.'</p>
-	' : '' ).''.((!empty($wpp_gallery)) ? "<h2 style=\"color:#333333\">Product Gallery</h2>".str_replace('<img ','<img style="padding:5px; border:1px solid #CCCCCC; background:#F5F5F5; float:left; margin-right:5px;" ', $wpp_gallery_images) .'
+	' : '' ).''.wpp_print_tabs($custom_tab_title_html, $custom_tab_content_html).'
+	'.((!empty($wpp_gallery)) ? "<h2 style=\"color:#333333\">Product Gallery</h2>".str_replace('<img ','<img style="padding:5px; border:1px solid #CCCCCC; background:#F5F5F5; float:left; margin-right:5px;" ', $wpp_gallery_images) .'
 	' : '' ).'
 	<p class=MsoNormal>&nbsp;</p>
 	<div style="clear:both"></div>
@@ -88,5 +89,9 @@ img{
 </div><br>
 </body>
 </html>';
+
+function wpp_print_tabs($title_html, $content_html){
+	foreach($title_html as $k => $title){ $h .= ((trim(strip_tags($content_html[$k]))) ? "<h2 style=\"color:#333333\">".$title."</h2><p>".$content_html[$k].'</p>' : '' );} return $h;
+}
 
 ?>

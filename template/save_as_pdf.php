@@ -14,11 +14,17 @@ $STR = '<table width="700" border="0"  bgcolor="#CCCCCC" cellspacing="1" cellpad
 	' : "\r\n" ).''.(($wpp_summary) ? "<h2>Product Summary</h2><br>\r\n<p>".$wpp_summary.'</p><br>
 	' : '' ).''.(($wpp_description) ? "\r\n<h2>Product Description</h2>\r\n<p>".$wpp_description.'</p><br>
 	' : '' ).''.((trim(strip_tags($attribute_html))) ? "\r\n<h2>Product Attributes</h2><br>\r\n<p>".$attribute_html.'</p><br>
-	' : '' ).''.((!empty($wpp_gallery)) ? "\r\n<h2>Product Gallery</h2><br>\r\n<p>".$wpp_gallery_images.'</p>
+	' : '' ).''.wpp_pdf_tabs($custom_tab_title_html, $custom_tab_content_html).'
+	'.((!empty($wpp_gallery)) ? "\r\n<h2>Product Gallery</h2><br>\r\n<p>".$wpp_gallery_images.'</p>
 	' : '' ).'
 	
 	</td>
   </tr>
 </table>';
+
+function wpp_pdf_tabs($title_html, $content_html){
+	foreach($title_html as $k => $title){ $h .= ((trim(strip_tags($content_html[$k]))) ? "\r\n<h2>".$title."</h2><br>\r\n<p>".$content_html[$k].'</p><br>' : '' );} return $h;
+}
+
 
 ?>

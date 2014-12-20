@@ -2004,6 +2004,7 @@ function Output($name='', $dest='')
 
 {
 
+	ob_clean();
 	//Output PDF to some destination
 
 	if($this->state<3)

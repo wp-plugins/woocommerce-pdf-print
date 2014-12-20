@@ -139,15 +139,15 @@ class PDF extends FPDF
 	
 	function Footer()
 	{
-		$footer_text_1 = '        Output as PDF file has been powered by [';
+		$footer_text_1 = '[ Export product details as PDF file has been powered by ';
 		$footer_text_2 = ' WooCommerce PDF & Print ' ;
-		$footer_text_3 = '] plugin by www.gVectors.com';
+		$footer_text_3 = ' plugin. ]';
 		$this->SetY(-10);
 		//$this->Image(WPP_PATH.'img/mini.png',($this->GetX()+1.5),($this->GetY()+1.4),4,3,'gif','http://profprojects.com');
 		$this->SetFont('Times','I',8);
 		$this->SetTextColor(150,150,150);
 		$this->Write(6, $footer_text_1 );
-		$this->SetTextColor(150,150,255);
+		$this->SetTextColor(130,130,130);
 		$this->Write(6, $footer_text_2, 'http://www.gvectors.com/?page=wpp' );
 		$this->SetTextColor(150,150,150);
 		$this->Write(6, $footer_text_3 );

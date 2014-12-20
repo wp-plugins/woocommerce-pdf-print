@@ -98,6 +98,7 @@ font-size:13px;
                     <div class="slider">
                         <ul class="bxslider">
                           <li><a href="https://wordpress.org/plugins/woodiscuz-woocommerce-comments/screenshots/"><img src="<?php echo WPP_PATH ?>img/gc/3.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
+                          <li><a href="https://wordpress.org/plugins/wpdiscuz/screenshots/"><img src="<?php echo WPP_PATH ?>img/gc/5.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
                           <li><a href="https://wordpress.org/plugins/advanced-content-pagination/screenshots/"><img src="<?php echo WPP_PATH ?>img/gc/1.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
                           <li><a href="https://wordpress.org/plugins/author-and-post-statistic-widgets/"><img src="<?php echo WPP_PATH ?>img/gc/2.png" title="Free Download from Wordpress.org" style="padding:0px 0px 20px 20px;" /></a></li>
                           
@@ -115,8 +116,8 @@ font-size:13px;
                 </thead>
                 <tbody>
                     <tr valign="top">
-                        <td style="background:#FFF; text-align:left; font-size:12px;">&nbsp;
-                        
+                        <td style="background:#FFF; text-align:left; font-size:12px;">
+                        	If you'd like to have the similar buttons on simple Posts and Pages please use our <a href="https://wordpress.org/plugins/universal-post-manager/"><strong>Universal Post Manager</strong></a> plugin. This plugin allows your visitors to <span style="color:#FF6600">Print</span> post/page content and download as <span style="color:#FF6600">PDF, Doc, TXT, HTML, XML</span> files.
                         </td>
                     </tr>
                 </tbody>
@@ -134,14 +135,14 @@ font-size:13px;
                             <ul>
                             <li>If you like WooPP and want to encourage us to develop and maintain it,why not do any or all of the following:</li>
                             <li>- Link to it so other folks can find out about it.</li>
-                            <li>- Give it a good rating on <a href="http://wordpress.org/extend/plugins/universal-post-manager/" target="_blank">WordPress.org.</a></li>
+                            <li>- Give it a good rating on <a href="https://wordpress.org/plugins/woocommerce-pdf-print/" target="_blank">WordPress.org.</a></li>
                             <li>- We spend as much of my spare time as possible working on WooCommerce PDF &amp; Print and any donation is appreciated. Donations play a crucial role in supporting Free and Open Source Software projects. <div style="width:200px; float:right;">
                             <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="VNMGTCF9NRH5C">
 <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form>
+</form></div>
 
                             </ul>
                             </td>

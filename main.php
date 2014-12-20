@@ -3,12 +3,12 @@
 Plugin Name: WooCommerce PDF & Print
 Plugin URI: 
 Description: Adds PDF, Doc and Print buttons on WooCommerce Product Page. Allows print and save product information as PDF and MS Doc file.
-Version: 1.0.2
+Version: 1.1.1
 Author: gVectors Team
 Author URI: http://www.gvectors.com
 */
 
-/*  Copyright 2009  Artyom Chakhoyan by ProfProjects.com (email : tom.webdever@gmail.com , support@gvectors.com)
+/*  Copyright 2014  Artyom Chakhoyan by gVectors Team (email : tom.webdever@gmail.com , support@gvectors.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GPL General Public License as published by
@@ -146,6 +146,11 @@ function wpp_install () {
 	if( get_option('pppm_installed') !='1.0.2' ){
 		///////////////////////////////////////////////
 		update_option( 'pppm_installed', '1.0.2' ); //
+		///////////////////////////////////////////////
+	}
+	if( get_option('pppm_installed') !='1.1.1' ){
+		///////////////////////////////////////////////
+		update_option( 'pppm_installed', '1.1.1' ); //
 		///////////////////////////////////////////////
 	}
 				
