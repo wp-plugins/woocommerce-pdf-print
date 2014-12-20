@@ -258,7 +258,7 @@ function wpp_text_filter( $wpp_body ){
 	$wpp_body = wpp_linkifyYouTubeURLs($wpp_body );
 	$wpp_body = str_replace( "’" , "'", $wpp_body );
 	$wpp_body =  do_shortcode( $wpp_body );
-	$wpp_body = apply_filters('the_content', $wpp_body);
+	$wpp_body = wpautop($wpp_body);
 	$xsearch = array ( "'<script[^>]*?>.*?</script>'si", "'<style[^>]*?>.*?</style>'si",  "'<head[^>]*?>.*?</head>'si", "'<link[^>]*?>.*?</link>'si", "'<link[^>]*?>'si", "'<object[^>]*?>.*?</object>'si"); 
 	$xreplace = array ( "", "", "", "", "", "");                 
 	$wpp_body = preg_replace($xsearch, $xreplace, $wpp_body);
