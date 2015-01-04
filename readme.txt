@@ -52,8 +52,8 @@ Universal Post Manager https://wordpress.org/plugins/universal-post-manager/
 
 = 1.2.3 =
 
-* Fixed Bug : Background of transparent PNG images were becoming black in PDF document
-* Fixed Bug : Another 14 currency symbols displaying problem on PDF document
+* Fixed Bug : Black background problem with transparent PNG images in PDF document
+* Fixed Bug : Another 14 currency symbols displaying problem in PDF document
 * Fixed Bug : Not saved document static phrases on 1.2.0 update process
 
 = 1.2.0 =
