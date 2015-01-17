@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: WooCommerce, WooCommerce Product, WooCommerce Product PDF, PDF, Save as PDF, Save Product as PDF, PDF Button, WooCommerce Product Word Document, Word Document, Doc, Save as Doc, Save as Word Document, Save Product as Doc, Doc Button, Word Document Button, Print, Product Print, WooCommerce Print, Print Button
 Requires at least: 2.7.0
 Tested up to: 4.1
-Stable tag: 1.2.3
+Stable tag: 1.3.1
 
 Adds PDF, Doc and Print buttons on WooCommerce Product Page. Allows print and save product information as PDF and MS Doc file.
 
@@ -49,6 +49,11 @@ Universal Post Manager https://wordpress.org/plugins/universal-post-manager/
 * Support Forum: <http://gvectors.com/questions/>
 
 == Changelog ==
+
+= 1.3.1 =
+
+* Fixed Bug : Again - not saved document static phrases on 1.2.3 update process
+* Added : Save as PDF Supports all languages (tested 64) Česky, Slovenščina, Հայերեն, მარგალური, עברית, Македонски, العربية, 中文, Ελληνικά, Türkçe, অসমীযা়  ...
 
 = 1.2.3 =
 
