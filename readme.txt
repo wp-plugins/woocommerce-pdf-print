@@ -3,8 +3,8 @@ Contributors: gVectors Team
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VNMGTCF9NRH5C
 Tags: WooCommerce, WooCommerce Product, WooCommerce Product PDF, PDF, Save as PDF, Save Product as PDF, PDF Button, WooCommerce Product Word Document, Word Document, Doc, Save as Doc, Save as Word Document, Save Product as Doc, Doc Button, Word Document Button, Print, Product Print, WooCommerce Print, Print Button
 Requires at least: 2.7.0
-Tested up to: 4.1.1
-Stable tag: 1.4.1
+Tested up to: 4.2
+Stable tag: 1.4.2
 
 Adds PDF, Doc and Print buttons on WooCommerce Product Page. Allows print and save product information as PDF and MS Doc file.
 
@@ -47,6 +47,11 @@ Universal Post Manager https://wordpress.org/plugins/universal-post-manager/
 * Support Forum: <http://gvectors.com/questions/>
 
 == Changelog ==
+
+= 1.4.2 =
+
+* Fixed Bug : Hide invisible product attributes in save/print documents
+* Fixed Bug : Strip shortcodes and form in product description
 
 = 1.4.1 =
 
